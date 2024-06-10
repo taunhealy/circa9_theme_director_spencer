@@ -1,0 +1,27 @@
+.grid-wrapper :nth-child(4n + 1) {
+  grid-column: span 2;
+}
+.grid-wrapper :nth-child(4n + 4) {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+.grid-wrapper:has(div:last-of-type:nth-of-type(odd)) div:last-of-type {
+  grid-column: 2 / span 2;
+}
+
+.grid-item {
+  display: block; /* Ensure all grid items are block elements */
+  opacity: 1; /* Default opacity */
+  transition: opacity 0.5s ease; /* Smooth transition for opacity */
+  height: 300px;
+}
+
+.grid-item.hidden {
+  opacity: 0;
+  pointer-events: none; /* Prevent interaction with hidden items */
+}
+
+.active-category {
+  text-decoration: underline;
+}
