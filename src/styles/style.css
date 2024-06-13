@@ -1,27 +1,86 @@
-.grid-wrapper :nth-child(4n + 1) {
+/* Define the blur effect class */
+.blur {
+  filter: blur(10px);
+  transition: filter 0.3s ease; /* Adjust the duration to match the GSAP animation */
+}
+
+/* Ensure the initial state does not have blur */
+.menu_background-2 {
+  filter: none;
+  transition: filter 0.3s ease; /* Ensure smooth transition */
+}
+
+.work_list :nth-child(4n + 1) {
   grid-column: span 2;
 }
-.grid-wrapper :nth-child(4n + 4) {
+.work_list :nth-child(4n + 4) {
   grid-column: span 2;
   grid-row: span 1;
 }
 
-.grid-wrapper:has(div:last-of-type:nth-of-type(odd)) div:last-of-type {
-  grid-column: 2 / span 2;
+.work_list:has(div:last-of-type:nth-of-type(odd)) div:last-of-type {
+  grid-column: 1 / span 2;
 }
 
-.grid-item {
-  display: block; /* Ensure all grid items are block elements */
-  opacity: 1; /* Default opacity */
-  transition: opacity 0.5s ease; /* Smooth transition for opacity */
-  height: 300px;
-}
-
-.grid-item.hidden {
+.work_card.hidden {
   opacity: 0;
   pointer-events: none; /* Prevent interaction with hidden items */
 }
 
 .active-category {
   text-decoration: underline;
+}
+
+.modal-content {
+  width: 55%;
+  height: 90%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.modal_container {
+  display: none; /* Hidden by default */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+}
+
+.modal_container.active {
+  display: block; /* Show the modal when active */
+}
+
+#modalVideo {
+  width: 100%;
+  height: 100%;
+  display: none; /* Hidden by default */
+}
+
+.modal_image {
+  width: 100%;
+  height: auto;
+  display: none; /* Hidden by default */
+}
+
+#spinner {
+  display: none; /* Hidden by default */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.work_card_image-1 {
+  filter: blur(5px) brightness(70%); /* Initial blur effect */
+
+  transition: filter 0.3s ease; /* Smooth transition */
+}
+
+.work_card_image-1:hover {
+  filter: blur(0px) brightness(100%); /* Remove blur on hover */
 }

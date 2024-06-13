@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import eslintPlugin from 'vite-plugin-eslint'
 
-// vite.config.js
 export default defineConfig({
   plugins: [eslintPlugin({ cache: false })],
   server: {
@@ -11,6 +10,9 @@ export default defineConfig({
       host: 'localhost',
       protocol: 'ws',
     },
+  },
+  optimizeDeps: {
+    exclude: ['gsap'], // Exclude GSAP from bundle
   },
   build: {
     minify: true,
@@ -23,10 +25,11 @@ export default defineConfig({
         esModule: false,
         compact: true,
         globals: {
+          // If you use any other global dependencies, define them here
           jquery: '$',
         },
       },
-      external: ['jquery'],
+      external: ['gsap', 'jquery'], // Exclude GSAP and jQuery from bundle
     },
   },
 })

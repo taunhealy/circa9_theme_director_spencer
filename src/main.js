@@ -1,6 +1,31 @@
 // Import GSAP for animations
-import gsap from 'gsap'
+
 import './styles/style.css'
+import './menu'
+
+// Function to perform stagger animation on elements within the page-wrapper
+function staggerAnimation() {
+  const wrapper = document.getElementById('page-wrapper')
+  wrapper.style.display = 'flex' // Set visibility to visible before animating
+  wrapper.style.opacity = 100
+  const elements = wrapper.children
+
+  gsap.from(elements, {
+    opacity: 0,
+    y: 32,
+    stagger: 0.45,
+    duration: 0.45,
+    ease: 'power2.out',
+  })
+}
+
+// Call staggerAnimation function on page load
+document.addEventListener('DOMContentLoaded', staggerAnimation)
+
+document.addEventListener(
+  'DOMContentLoaded', // Initialize modal functionality
+  setupModal
+)
 
 // Function to handle modal functionality
 function setupModal() {
@@ -13,26 +38,39 @@ function setupModal() {
   const spinner = document.querySelector('#spinner')
   const workItems = document.querySelectorAll('.work_card')
 
+  console.log('modal:', modal)
+  console.log('closeButton:', closeButton)
+  console.log('nextButton:', nextButton)
+  console.log('prevButton:', prevButton)
+  console.log('modalVideo:', modalVideo)
+  console.log('modalImage:', modalImage)
+  console.log('spinner:', spinner)
+
   function openModal(item) {
+    console.log('Opening modal') // Debug statement
     const videoLink = item.dataset.videoLink
     const imageSrc = item.querySelector('img').src
     const brand = item.querySelector('.work_brand').textContent
     const title = item.querySelector('.work_title').textContent
-    const directorName = item.querySelector(
-      '.director-name_heading'
-    ).textContent
+    const directorName = item.dataset.director // Get the 'Directed By' information
+
+    console.log(`Video link: ${videoLink}`) // Debug statement
+    console.log(`Director: ${directorName}`) // Debug statement
 
     modal.querySelector('.modal_brand').textContent = brand
     modal.querySelector('.modal_title').textContent = title
     modal.querySelector('.modal-director_heading').textContent = directorName
 
     if (videoLink) {
+      const vimeoId = videoLink.split('/').pop()
+      const embedUrl = `https://player.vimeo.com/video/${vimeoId}`
+      console.log(`Loading video: ${embedUrl}`) // Debug statement
       spinner.style.display = 'block'
       modalVideo.style.display = 'block'
       modalImage.style.display = 'none'
 
       const iframe = document.createElement('iframe')
-      iframe.src = videoLink
+      iframe.src = embedUrl
       iframe.width = '100%'
       iframe.height = '100%'
       iframe.frameBorder = '0'
@@ -43,42 +81,57 @@ function setupModal() {
       modalVideo.appendChild(iframe)
 
       iframe.onload = () => {
+        console.log('Iframe loaded') // Debug statement
+        spinner.style.display = 'none'
+      }
+
+      iframe.onerror = () => {
+        console.error('Iframe failed to load') // Debug statement
         spinner.style.display = 'none'
       }
     } else {
+      console.log('No video link, showing image') // Debug statement
       modalVideo.style.display = 'none'
       modalImage.style.display = 'block'
       modalImage.src = imageSrc
     }
 
-    modal.style.display = 'block'
+    modal.classList.add('active')
   }
 
   function closeModal() {
-    modal.style.display = 'none'
+    console.log('Closing modal') // Debug statement
+    modal.classList.remove('active')
     modalVideo.innerHTML = ''
   }
 
   function nextItem() {
+    console.log('Next item') // Debug statement
     let currentItem = document.querySelector('.work_card.is-active')
     let nextItem = currentItem.nextElementSibling
     if (!nextItem) {
       nextItem = workItems[0]
     }
+    currentItem.classList.remove('is-active')
+    nextItem.classList.add('is-active')
     openModal(nextItem)
   }
 
   function prevItem() {
+    console.log('Previous item') // Debug statement
     let currentItem = document.querySelector('.work_card.is-active')
     let prevItem = currentItem.previousElementSibling
     if (!prevItem) {
       prevItem = workItems[workItems.length - 1]
     }
+    currentItem.classList.remove('is-active')
+    prevItem.classList.add('is-active')
     openModal(prevItem)
   }
 
   workItems.forEach((item) => {
     item.addEventListener('click', () => {
+      console.log('Work item clicked') // Debug statement
       openModal(item)
       document
         .querySelector('.work_card.is-active')
@@ -90,10 +143,16 @@ function setupModal() {
   closeButton.addEventListener('click', closeModal)
   nextButton.addEventListener('click', nextItem)
   prevButton.addEventListener('click', prevItem)
+
+  // Close modal when clicking outside of the modal content
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal()
+    }
+  })
 }
 
-// Initialize the modal functionality
-setupModal()
+/* eslint-disable no-undef */
 
 // Filter and fade in work items
 document.addEventListener('DOMContentLoaded', function () {
@@ -101,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
     '.work-filter_categories_item'
   )
   const workItems = document.querySelectorAll('.work_card')
-  const offset = 90 // Adjust this value as needed
+  const offset = 30 // Adjust this value as needed
 
   function fadeInWorkItems(items) {
     if (items.length > 0) {
@@ -134,7 +193,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Get the top position of the container before filtering
     const containerTop =
-      document.querySelector('.work_section').getBoundingClientRect().top +
+      document
+        .querySelector('.work_filter-categories_container')
+        .getBoundingClientRect().top +
       window.scrollY -
       offset
 
