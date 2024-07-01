@@ -23,16 +23,10 @@ function setupScrollUpFunctionality() {
   }
 
   function trackScroll() {
-    const scrolled = window.pageYOffset
-    const scrollTrigger = document.querySelector('.work-filter') // Adjust to your specific scroll trigger element
-    const coords =
-      scrollTrigger.getBoundingClientRect().top + window.pageYOffset
-
-    if (scrolled > coords) {
-      workScrollUpWrapper.classList.add('show')
-    } else {
-      workScrollUpWrapper.classList.remove('show')
-    }
+    workScrollUpWrapper.classList.toggle(
+      'show',
+      window.scrollY > window.innerHeight
+    )
   }
 
   function backToTop() {
@@ -43,8 +37,9 @@ function setupScrollUpFunctionality() {
     function animateScroll(timestamp) {
       const elapsed = timestamp - startTime
       const easeInOut = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t)
+      const newY = easeInOut(elapsed / duration) * (0 - startY) + startY
 
-      window.scrollTo(0, easeInOut(elapsed / duration) * (0 - startY) + startY)
+      window.scrollTo(0, newY)
 
       if (elapsed < duration) {
         requestAnimationFrame(animateScroll)
