@@ -214,14 +214,18 @@ function staggerAnimation() {
     wrapper.style.display = 'flex'
     wrapper.style.opacity = '0'
 
-    gsap.from(wrapper, {
-      opacity: 1,
-      x: -35,
-      stagger: 0.25,
-      duration: 0.55,
-      ease: 'power2.out',
-      delay: 0.25,
-    })
+    gsap.fromTo(
+      wrapper, // Target element
+      { opacity: 0, x: -35 }, // From properties
+      {
+        opacity: 1,
+        x: 0,
+        stagger: 0.25,
+        duration: 0.55,
+        ease: 'power2.out',
+        delay: 0.25,
+      } // To properties
+    )
 
     const recentWorkWrapper = document.querySelector('.work_wrapper.is-recent')
     const otherWorkWrappers = document.querySelectorAll(
