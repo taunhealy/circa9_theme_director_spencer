@@ -43,10 +43,6 @@ function setupScrollUpFunctionality() {
 
       if (elapsed < duration) {
         requestAnimationFrame(animateScroll)
-      } else {
-        setTimeout(() => {
-          ScrollTrigger.update() // Refresh ScrollTrigger positions
-        }, 100)
       }
     }
 
