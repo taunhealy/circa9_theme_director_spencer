@@ -215,7 +215,7 @@ function staggerAnimation() {
     wrapper.style.opacity = '0'
 
     gsap.from(wrapper, {
-      opacity: 0,
+      opacity: 1,
       x: -35,
       stagger: 0.25,
       duration: 0.55,
