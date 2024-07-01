@@ -17,20 +17,15 @@ document.addEventListener('DOMContentLoaded', function () {
 function setupScrollUpFunctionality() {
   const workScrollUpWrapper = document.querySelector('#scrollUpIcon')
 
-  if (!workScrollUpWrapper) {
-    console.log('No element with the ID "scrollUpIcon" found.')
-    return
-  }
-
   function backToTop() {
     console.log('scrollTo called')
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   workScrollUpWrapper.addEventListener('click', (event) => {
+    backToTop()
     event.stopPropagation() // Stop the event from propagating
     console.log('Button clicked')
-    backToTop()
   })
 }
 
