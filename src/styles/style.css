@@ -133,3 +133,9 @@
     grid-template-columns: 3fr; /* Single column for phones */
   }
 }
+
+#scrollUpIcon.back_to_top-show {
+  display: flex !important; /* Ensure the icon is displayed when the class is added */
+  opacity: 1 !important; /* Ensure the icon is fully visible */
+  /* Additional styling can go here if needed */
+}

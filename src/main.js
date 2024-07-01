@@ -23,35 +23,28 @@ function setupScrollUpFunctionality() {
   }
 
   function trackScroll() {
-    workScrollUpWrapper.classList.toggle(
-      'show',
-      window.scrollY > window.innerHeight
-    )
+    var scrolled = window.scrollY // Use window.scrollY instead of deprecated window.pageYOffset
+    var coords = window.innerHeight // Use window.innerHeight for viewport height
+
+    if (scrolled > coords) {
+      workScrollUpWrapper.classList.add('back_to_top-show')
+    } else {
+      workScrollUpWrapper.classList.remove('back_to_top-show')
+    }
   }
 
   function backToTop() {
-    const startY = window.scrollY
-    const duration = 500
-    const startTime = performance.now()
-
-    function animateScroll(timestamp) {
-      const elapsed = timestamp - startTime
-      const easeInOut = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t)
-      const newY = easeInOut(elapsed / duration) * (0 - startY) + startY
-
-      window.scrollTo(0, newY)
-
-      if (elapsed < duration) {
-        requestAnimationFrame(animateScroll)
-      }
+    if (window.scrollY > 0) {
+      window.scrollBy(0, -80)
+      setTimeout(backToTop, 0)
     }
-
-    requestAnimationFrame(animateScroll)
   }
 
   window.addEventListener('scroll', trackScroll)
   workScrollUpWrapper.addEventListener('click', backToTop)
 }
+
+setupScrollUpFunctionality() // Call the function to initialize
 
 function setupModal() {
   const modal = document.querySelector('.modal_container')
