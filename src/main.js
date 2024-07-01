@@ -37,7 +37,7 @@ function setupScrollUpFunctionality() {
 
   function backToTop() {
     console.log('Lenis scrollTo called')
-    lenis.scrollTo(0, { immediate: false })
+    lenis.scrollTo(0, { immediate: true })
   }
 
   workScrollUpWrapper.addEventListener('click', (event) => {
