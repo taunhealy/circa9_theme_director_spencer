@@ -24,9 +24,13 @@ function setupScrollUpFunctionality() {
 
   function backToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+    console.log('sscrollTo called')
   }
 
-  workScrollUpWrapper.addEventListener('click', backToTop)
+  workScrollUpWrapper.addEventListener('click', () => {
+    console.log('Button clicked')
+    backToTop()
+  })
 }
 
 document.addEventListener('DOMContentLoaded', setupScrollUpFunctionality)
