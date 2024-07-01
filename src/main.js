@@ -1,10 +1,8 @@
 import './styles/style.css'
 import gsap from 'gsap'
-import { ScrollTrigger, ScrollToPlugin } from 'gsap/all'
+import { ScrollTrigger } from 'gsap/all'
 import './menu'
 import './layoutArray'
-
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 
 document.addEventListener('DOMContentLoaded', function () {
   setupScrollUpFunctionality()
