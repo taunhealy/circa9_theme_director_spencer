@@ -1,7 +1,7 @@
 import './styles/style.css'
-import Lenis from '@studio-freight/lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/all'
+import Lenis from 'lenis'
 import './menu'
 import './layoutArray'
 
