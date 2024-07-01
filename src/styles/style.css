@@ -139,3 +139,19 @@
   opacity: 1 !important; /* Ensure the icon is fully visible */
   /* Additional styling can go here if needed */
 }
+
+html.lenis {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+}
+
+html.wf-loading * {
+  opacity: 0;
+}

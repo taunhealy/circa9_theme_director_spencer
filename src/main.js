@@ -1,4 +1,5 @@
 import './styles/style.css'
+import Lenis from '@studio-freight/lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/all'
 import './menu'
@@ -6,6 +7,18 @@ import './layoutArray'
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger)
+
+// Initialize Lenis
+const lenis = new Lenis({
+  lerp: 0.07,
+  wheelMultiplier: 1,
+})
+
+function raf(time) {
+  lenis.raf(time)
+  requestAnimationFrame(raf)
+}
+requestAnimationFrame(raf)
 
 document.addEventListener('DOMContentLoaded', function () {
   setupScrollUpFunctionality()
@@ -17,15 +30,21 @@ document.addEventListener('DOMContentLoaded', function () {
 function setupScrollUpFunctionality() {
   const workScrollUpWrapper = document.querySelector('#scrollUpIcon')
 
+  if (!workScrollUpWrapper) {
+    console.log('No element with the ID "scrollUpIcon" found.')
+    return
+  }
+
   function backToTop() {
-    console.log('scrollTo called')
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    console.log('Lenis scrollTo called')
+    lenis.scrollTo(0, { immediate: false })
   }
 
   workScrollUpWrapper.addEventListener('click', (event) => {
-    backToTop()
-    event.stopPropagation() // Stop the event from propagating
+    event.stopPropagation()
+    console.clear() // Clear the console for fresh logs
     console.log('Button clicked')
+    backToTop()
   })
 }
 
