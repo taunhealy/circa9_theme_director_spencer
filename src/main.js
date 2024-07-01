@@ -32,13 +32,14 @@ function setupScrollUpFunctionality() {
   }
 
   function backToTop() {
-    console.log('Scroll to top')
-
-    gsap.to(window, {
-      duration: 1,
-      scrollTo: { y: 0 },
-      ease: 'power2.out',
-    })
+    const scrollToTop = () => {
+      const c = document.documentElement.scrollTop || document.body.scrollTop
+      if (c > 0) {
+        window.requestAnimationFrame(scrollToTop)
+        window.scrollTo(0, c - c / 8)
+      }
+    }
+    scrollToTop()
   }
 
   workScrollUpWrapper.addEventListener('click', () => {
