@@ -1,12 +1,8 @@
 import './styles/style.css'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/all'
 import Lenis from 'lenis'
 import './menu'
 import './layoutArray'
-
-// Register GSAP plugins
-gsap.registerPlugin(ScrollTrigger)
 
 // Initialize Lenis
 const lenis = new Lenis({
