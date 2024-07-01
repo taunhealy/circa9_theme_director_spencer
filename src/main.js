@@ -22,14 +22,25 @@ function setupScrollUpFunctionality() {
     return
   }
 
-  workScrollUpWrapper.addEventListener('click', () => {
-    console.log('Scroll up icon clicked')
+  function trackScroll() {
+    const scrolled = window.pageYOffset
+    const scrollTrigger = document.querySelector('.work-filter') // Adjust to your specific scroll trigger element
+    const coords =
+      scrollTrigger.getBoundingClientRect().top + window.pageYOffset
 
+    if (scrolled > coords) {
+      workScrollUpWrapper.classList.add('show')
+    } else {
+      workScrollUpWrapper.classList.remove('show')
+    }
+  }
+
+  function backToTop() {
     const startY = window.scrollY
     const duration = 900
     const startTime = performance.now()
 
-    const animateScroll = (timestamp) => {
+    function animateScroll(timestamp) {
       const elapsed = timestamp - startTime
       const easeInOut = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t)
 
@@ -46,7 +57,10 @@ function setupScrollUpFunctionality() {
 
     requestAnimationFrame(animateScroll)
     gsap.to(workScrollUpWrapper, { duration: 0.36, opacity: 0 })
-  })
+  }
+
+  window.addEventListener('scroll', trackScroll)
+  workScrollUpWrapper.addEventListener('click', backToTop)
 }
 
 function setupModal() {
