@@ -22,17 +22,6 @@ function setupScrollUpFunctionality() {
     return
   }
 
-  function trackScroll() {
-    var scrolled = window.scrollY // Use window.scrollY instead of deprecated window.pageYOffset
-    var coords = window.innerHeight // Use window.innerHeight for viewport height
-
-    if (scrolled > coords) {
-      workScrollUpWrapper.classList.add('back_to_top-show')
-    } else {
-      workScrollUpWrapper.classList.remove('back_to_top-show')
-    }
-  }
-
   function backToTop() {
     if (window.scrollY > 0) {
       window.scrollBy(0, -80)
@@ -40,7 +29,6 @@ function setupScrollUpFunctionality() {
     }
   }
 
-  window.addEventListener('scroll', trackScroll)
   workScrollUpWrapper.addEventListener('click', backToTop)
 }
 
