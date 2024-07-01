@@ -133,7 +133,3 @@
     grid-template-columns: 3fr; /* Single column for phones */
   }
 }
-
-#scrollUpIcon.show {
-  opacity: 1;
-}
