@@ -23,19 +23,16 @@ function setupScrollUpFunctionality() {
   }
 
   function backToTop() {
+    console.log('scrollTo called')
     window.scrollTo({ top: 0, behavior: 'smooth' })
-    console.log('sscrollTo called')
   }
 
-  workScrollUpWrapper.addEventListener('click', () => {
+  workScrollUpWrapper.addEventListener('click', (event) => {
+    event.stopPropagation() // Stop the event from propagating
     console.log('Button clicked')
     backToTop()
   })
 }
-
-document.addEventListener('DOMContentLoaded', setupScrollUpFunctionality)
-
-setupScrollUpFunctionality() // Call the function to initialize
 
 function setupModal() {
   const modal = document.querySelector('.modal_container')
