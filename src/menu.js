@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 // Select the menu button and menu component
 let isOpen = false
-const ham = document.querySelector('.nav_menu-link')
+const hamButtons = document.querySelectorAll('.nav_menu-link')
 const menu = document.querySelector('.menu_container')
 const menuBackground1 = document.querySelector('.menu_background-1')
 const menuBackground2 = document.querySelector('.menu_background-2')
@@ -86,15 +86,20 @@ function toggleMenu() {
   }
 }
 
-// Add event listener to toggle the menu on menu button click
-ham.addEventListener('click', () => {
-  toggleMenu()
+console.log(hamButtons)
+
+// Add event listener to toggle the menu on each menu button click
+hamButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    console.log('Menu button clicked:', button) // Log the clicked button
+    toggleMenu()
+  })
 })
 
 // Add event listener to close the menu when a link is clicked and navigate
 menuLinks.forEach((link) => {
   // Hover in event listener
-  link.addEventListener('mouseenter', () => {
+  menuBackground1.addEventListener('mouseenter', () => {
     gsap.to(menuBackground1, {
       x: -10, // Move background-1 slightly to the left
       duration: 0.2,
@@ -103,7 +108,7 @@ menuLinks.forEach((link) => {
   })
 
   // Hover out event listener
-  link.addEventListener('mouseleave', () => {
+  menuBackground1.addEventListener('mouseleave', () => {
     gsap.to(menuBackground1, {
       x: 0, // Return background-1 to its original position
       duration: 0.2,
@@ -157,4 +162,18 @@ menuLinks.forEach((link) => {
         })
     }
   })
+
+  // Function to close the menu when clicking outside
+  function handleClickOutside(event) {
+    if (
+      isOpen &&
+      !menu.contains(event.target) &&
+      !Array.from(hamButtons).some((button) => button.contains(event.target))
+    ) {
+      toggleMenu()
+    }
+  }
+
+  // Add event listener for clicking outside the menu
+  document.addEventListener('click', handleClickOutside)
 })

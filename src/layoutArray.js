@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // Select all work cards
 function setupGridLayoutPattern() {
   const workCards = Array.from(document.querySelectorAll('.work_card')) // Convert NodeList to array
@@ -6,7 +7,7 @@ function setupGridLayoutPattern() {
     { rows: 1, cols: 3 },
     { rows: 1, cols: 3 },
     { rows: 1, cols: 3 },
-    { rows: 1, cols: 3 },
+    { rows: 3, cols: 3 },
   ]
 
   // Generate an array of indices representing the order
