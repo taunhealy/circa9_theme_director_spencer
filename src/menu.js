@@ -7,6 +7,11 @@ const menuBackground1 = document.querySelector('.menu_background-1')
 const menuBackground2 = document.querySelector('.menu_background-2')
 const menuLinks = menu.querySelectorAll('a') // Select all links within the menu
 
+import gsap from 'gsap' // Import GSAP
+import { ScrollTrigger } from 'gsap/all' // Import necessary plugins if used
+
+gsap.registerPlugin(ScrollTrigger) // Register plugins if needed
+
 // Function to toggle menu
 function toggleMenu() {
   const tl = gsap.timeline()
