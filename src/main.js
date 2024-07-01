@@ -212,7 +212,7 @@ function staggerAnimation() {
   const wrapper = document.getElementById('page-wrapper')
   if (wrapper) {
     wrapper.style.display = 'flex'
-    wrapper.style.opacity = '1'
+    wrapper.style.opacity = '0'
 
     gsap.from(wrapper, {
       opacity: 0,
