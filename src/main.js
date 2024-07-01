@@ -35,16 +35,13 @@ function setupScrollUpFunctionality() {
     console.log('Scroll to top')
 
     gsap.to(window, {
-      duration: 0.8,
+      duration: 1,
       scrollTo: { y: 0 },
       ease: 'power2.out',
     })
   }
 
-  workScrollUpWrapper.addEventListener('click', (event) => {
-    event.stopPropagation()
-    console.clear() // Clear the console for fresh logs
-    console.log('Button clicked')
+  workScrollUpWrapper.addEventListener('click', () => {
     backToTop()
   })
 }
