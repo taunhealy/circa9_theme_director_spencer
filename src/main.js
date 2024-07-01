@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 // Initialize Lenis
 const lenis = new Lenis({
-  lerp: 0.07,
+  lerp: 0.02,
   wheelMultiplier: 1,
 })
 
@@ -38,16 +38,8 @@ function setupScrollUpFunctionality() {
   function backToTop() {
     console.log('Scroll to top clicked')
 
-    // Deactivate Lenis temporarily
-    lenis.stop()
-
     // Scroll to top using native scroll behavior
     window.scrollTo({ top: 0, behavior: 'smooth' })
-
-    // Reactivate Lenis after scrolling is done (optional)
-    setTimeout(() => {
-      lenis.start()
-    }, 1000) // Adjust the delay as needed to ensure smooth reactivation
   }
 
   workScrollUpWrapper.addEventListener('click', (event) => {
