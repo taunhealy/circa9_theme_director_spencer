@@ -17,60 +17,36 @@ document.addEventListener('DOMContentLoaded', function () {
 function setupScrollUpFunctionality() {
   const workScrollUpWrapper = document.querySelector('#scrollUpIcon')
 
-  if (workScrollUpWrapper) {
-    // ScrollTrigger for showing the element when scrolling past .work-filter
-    const scrollTriggerShow = ScrollTrigger.create({
-      trigger: '.work-filter',
-      start: 'top 30%',
-      onEnter: () => gsap.to(workScrollUpWrapper, { opacity: 1 }),
-      onLeaveBack: () => gsap.to(workScrollUpWrapper, { opacity: 0 }),
-    })
-
-    // ScrollTrigger for hiding the element when scrolling near the footer
-    const scrollTriggerHide = ScrollTrigger.create({
-      trigger: '.footer',
-      start: 'top bottom',
-      onEnter: () => gsap.to(workScrollUpWrapper, { opacity: 0 }),
-      onLeaveBack: () => gsap.to(workScrollUpWrapper, { opacity: 1 }),
-    })
-
-    // Add click event listener to the scroll-up icon
-    workScrollUpWrapper.addEventListener('click', () => {
-      console.log('Scroll up icon clicked')
-
-      scrollTriggerShow.disable()
-      scrollTriggerHide.disable()
-
-      const startY = window.scrollY
-      const duration = 900
-
-      const animateScroll = (timestamp) => {
-        const currentTime = timestamp || new Date().getTime()
-        const elapsed = currentTime - startTime
-        const easeInOut = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t)
-
-        window.scrollTo(
-          0,
-          easeInOut(elapsed / duration) * (0 - startY) + startY
-        )
-
-        if (elapsed < duration) {
-          requestAnimationFrame(animateScroll)
-        } else {
-          setTimeout(() => {
-            scrollTriggerShow.enable()
-            scrollTriggerHide.enable()
-          }, 100)
-        }
-      }
-
-      const startTime = window.performance.now()
-      requestAnimationFrame(animateScroll)
-      gsap.to(workScrollUpWrapper, { duration: 0.36, opacity: 0 })
-    })
-  } else {
+  if (!workScrollUpWrapper) {
     console.log('No element with the ID "scrollUpIcon" found.')
+    return
   }
+
+  workScrollUpWrapper.addEventListener('click', () => {
+    console.log('Scroll up icon clicked')
+
+    const startY = window.scrollY
+    const duration = 900
+    const startTime = performance.now()
+
+    const animateScroll = (timestamp) => {
+      const elapsed = timestamp - startTime
+      const easeInOut = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t)
+
+      window.scrollTo(0, easeInOut(elapsed / duration) * (0 - startY) + startY)
+
+      if (elapsed < duration) {
+        requestAnimationFrame(animateScroll)
+      } else {
+        setTimeout(() => {
+          ScrollTrigger.update() // Refresh ScrollTrigger positions
+        }, 100)
+      }
+    }
+
+    requestAnimationFrame(animateScroll)
+    gsap.to(workScrollUpWrapper, { duration: 0.36, opacity: 0 })
+  })
 }
 
 function setupModal() {
