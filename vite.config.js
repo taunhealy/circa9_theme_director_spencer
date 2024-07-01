@@ -12,7 +12,7 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ['gsap'], // Include GSAP for optimization
+    include: ['gsap'],
   },
   build: {
     minify: true,
@@ -25,10 +25,10 @@ export default defineConfig({
         esModule: false,
         compact: true,
         globals: {
-          jquery: '$', // Define jQuery as a global dependency if used
+          jquery: '$',
         },
       },
-      external: ['jquery'], // Exclude jQuery from bundle if it's used as a global dependency
+      external: ['jquery'],
     },
   },
 })

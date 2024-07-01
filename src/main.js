@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/all'
 import './menu'
 import './layoutArray'
 
+// Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger)
 
 document.addEventListener('DOMContentLoaded', function () {
