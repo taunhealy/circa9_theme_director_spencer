@@ -23,14 +23,13 @@ function setupScrollUpFunctionality() {
   }
 
   function backToTop() {
-    if (window.scrollY > 0) {
-      window.scrollBy(0, -80)
-      setTimeout(backToTop, 0)
-    }
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   workScrollUpWrapper.addEventListener('click', backToTop)
 }
+
+document.addEventListener('DOMContentLoaded', setupScrollUpFunctionality)
 
 setupScrollUpFunctionality() // Call the function to initialize
 
