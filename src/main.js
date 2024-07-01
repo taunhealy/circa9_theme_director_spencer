@@ -6,7 +6,7 @@ import './layoutArray'
 
 // Initialize Lenis
 const lenis = new Lenis({
-  lerp: 0.02,
+  lerp: 0.07,
   wheelMultiplier: 1,
 })
 
