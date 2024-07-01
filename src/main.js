@@ -31,7 +31,7 @@ function setupScrollUpFunctionality() {
 
   function backToTop() {
     const startY = window.scrollY
-    const duration = 900
+    const duration = 500
     const startTime = performance.now()
 
     function animateScroll(timestamp) {
@@ -51,7 +51,6 @@ function setupScrollUpFunctionality() {
     }
 
     requestAnimationFrame(animateScroll)
-    gsap.to(workScrollUpWrapper, { duration: 0.36, opacity: 0 })
   }
 
   window.addEventListener('scroll', trackScroll)
