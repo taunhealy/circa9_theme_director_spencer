@@ -32,10 +32,13 @@ function setupScrollUpFunctionality() {
   }
 
   function backToTop() {
-    console.log('Scroll to top clicked')
+    console.log('Scroll to top')
 
-    // Scroll to top using native scroll behavior
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    gsap.to(window, {
+      duration: 0.8,
+      scrollTo: { y: 0 },
+      ease: 'power2.out',
+    })
   }
 
   workScrollUpWrapper.addEventListener('click', (event) => {
