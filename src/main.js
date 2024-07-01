@@ -4,6 +4,8 @@ import { ScrollTrigger } from 'gsap/all'
 import './menu'
 import './layoutArray'
 
+gsap.registerPlugin(ScrollTrigger)
+
 document.addEventListener('DOMContentLoaded', function () {
   setupScrollUpFunctionality()
   setupModal()
