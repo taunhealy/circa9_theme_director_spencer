@@ -286,6 +286,11 @@ function setupCategoryFiltering() {
 
       filterAndFadeInWorkItems(categoryName)
 
+      // Scroll to categories wrapper
+      if (categoryButtons) {
+        categoryButtons.scrollIntoView({ behavior: 'smooth' })
+      }
+
       categoryButtons.forEach((btn) => {
         btn.classList.remove('active-category')
         Array.from(btn.children).forEach((child) => {
