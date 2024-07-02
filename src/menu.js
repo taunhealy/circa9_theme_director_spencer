@@ -109,7 +109,7 @@ menuLinks.forEach((link) => {
       x: -10, // Move background-1 slightly to the left
       duration: 0.2,
       ease: 'power1.out',
-      delay: 1,
+      delay: 0.3,
     })
   })
 
