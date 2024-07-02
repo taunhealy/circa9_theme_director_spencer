@@ -229,6 +229,10 @@ function setupCategoryFiltering() {
   const categoryButtons = document.querySelectorAll(
     '.work-filter_categories_item'
   )
+
+  const categoryWrapper = document.querySelector(
+    '.work_filter-categories_wrapper'
+  )
   const workItems = document.querySelectorAll('.work_card')
   const recentWorkWrapper = document.querySelector('.work_wrapper.is-recent')
 
@@ -287,8 +291,8 @@ function setupCategoryFiltering() {
       filterAndFadeInWorkItems(categoryName)
 
       // Scroll to categories wrapper
-      if (categoryButtons) {
-        categoryButtons.scrollIntoView({ behavior: 'smooth' })
+      if (categoryWrapper) {
+        categoryWrapper.scrollIntoView({ behavior: 'smooth' })
       }
 
       categoryButtons.forEach((btn) => {
