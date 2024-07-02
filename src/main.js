@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
   staggerAnimation()
   setupCategoryFiltering()
 })
-
 function setupScrollUpFunctionality() {
   const workScrollUpWrapper = document.querySelector('#scrollUpIcon')
 
@@ -32,20 +31,14 @@ function setupScrollUpFunctionality() {
   }
 
   function backToTop() {
-    const scrollToTop = () => {
-      const c = document.documentElement.scrollTop || document.body.scrollTop
-      if (c > 0) {
-        window.requestAnimationFrame(scrollToTop)
-        window.scrollTo(0, c - c / 8)
-      }
-    }
-    scrollToTop()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  workScrollUpWrapper.addEventListener('click', () => {
-    backToTop()
-  })
+  workScrollUpWrapper.addEventListener('click', backToTop)
 }
+
+// Initialize the function
+setupScrollUpFunctionality()
 
 function setupModal() {
   const modal = document.querySelector('.modal_container')

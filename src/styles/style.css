@@ -140,6 +140,10 @@
   /* Additional styling can go here if needed */
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html.lenis,
 html.lenis body {
   height: auto;
