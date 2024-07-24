@@ -214,3 +214,7 @@ html.lenis body {
 .work_selects_item-highlight {
   transition: 0.5s;
 }
+
+.page-wrapper {
+  opacity: 0;
+}
