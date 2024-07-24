@@ -1,5 +1,6 @@
 import './styles/style.css'
 import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import './menu'
 import './layoutArray'
@@ -278,7 +279,7 @@ function staggerAnimation() {
 
     gsap.fromTo(
       wrapper, // Target element
-      { opacity: 0.7, x: -35 }, // From properties
+      { opacity: 0.7, x: 0 }, // From properties
       {
         opacity: 1,
         x: 0,
@@ -586,6 +587,28 @@ document.addEventListener('DOMContentLoaded', () => {
       if (highlight) {
         highlight.style.opacity = '0.5' // Adjust to your default opacity
       }
+    })
+  })
+})
+
+// animate sections of page-wrapper using GSAP
+document.addEventListener('DOMContentLoaded', () => {
+  gsap.registerPlugin(ScrollTrigger)
+
+  // Select all direct children divs of the page-wrapper and animate
+  const sections = document.querySelectorAll('.page-wrapper > div')
+
+  sections.forEach((section) => {
+    gsap.from(section, {
+      opacity: 0,
+      y: 32,
+      duration: 1,
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 80%', // Trigger animation when section is in the viewport
+        end: 'bottom 60%', // End animation when section leaves the viewport
+        toggleActions: 'play none none none', // Only play animation on scroll
+      },
     })
   })
 })
