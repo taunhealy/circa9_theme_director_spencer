@@ -9,12 +9,6 @@
   opacity: 1;
 }
 
-/* Ensure the initial state does not have blur */
-.menu_background-2 {
-  filter: none;
-  transition: filter 0.3s ease; /* Ensure smooth transition */
-}
-
 .work_list :nth-child(4n + 1) {
   grid-column: span 2;
 }
@@ -30,25 +24,6 @@
 .work_card.hidden {
   opacity: 0;
   pointer-events: none; /* Prevent interaction with hidden items */
-}
-
-.work-filter_categories_text {
-  /* Initial border styles */
-  border: 1.5px solid black;
-  border-radius: 10px; /* Rounded corners */
-}
-
-.work-filter_categories_text:hover {
-  border-color: transparent; /* Hide the border color */
-  border-image: linear-gradient(to right, darkblue, darkorchid) 1;
-  border-radius: 10px;
-}
-
-.active-category .work-filter_categories_text {
-  /* Styles when the category button is active */
-  border-color: transparent; /* Hide the border color */
-  border-image: linear-gradient(to right, darkblue, darkorchid) 1; /* Gradient border */
-  border-radius: 10px;
 }
 
 .modal-content {
@@ -102,23 +77,6 @@
   filter: blur(0px) brightness(100%); /* Remove blur on hover */
 }
 
-.work-filter_categories_text:hover {
-  border: 1.5px solid transparent; /* Make border transparent */
-  background: linear-gradient(white, white) padding-box,
-    linear-gradient(to right, darkblue, darkorchid) border-box;
-  border-radius: 10px;
-  width: 100%;
-  height: 100%; /* Adjust padding for proper background clip */
-}
-
-.active-category .work-filter_categories_text {
-  border: 1.5px solid transparent; /* Make border transparent */
-  background: linear-gradient(white, white) padding-box,
-    linear-gradient(to right, darkblue, darkorchid) border-box;
-  border-radius: 10px;
-  /* Adjust padding for proper background clip */
-}
-
 /* Tablet (landscape) */
 @media screen and (max-width: 767px) {
   .work_list {
@@ -163,4 +121,96 @@ html.lenis body {
 
 .lenis.lenis-smooth iframe {
   pointer-events: none;
+}
+
+.work-filter_title_text {
+  backdrop-filter: blur(20px);
+  transition: 0.5s;
+  box-sizing: border-box;
+}
+
+.work-filter_title_text:hover {
+  background: none;
+  border: 1px solid white;
+  color: white;
+  box-sizing: border-box;
+}
+
+.work-filter_categories_item .work-filter_categories_text {
+  transition: 0.5s;
+}
+
+.work-filter_categories_item.active-category .work-filter_categories_text {
+  background: #333;
+  border: 1px solid black;
+  color: white;
+  /* Adjust padding for proper background clip */
+}
+
+.footer_about_button {
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  border: 1px solid white; /* Transparent border to maintain the same size */
+  color: white;
+  background: none;
+}
+
+.footer_about_button:hover {
+  background: grey;
+  border: 1px solid white;
+  color: white;
+  box-sizing: border-box;
+  border-radius: 20px;
+}
+
+.work-filter_categories_text:hover {
+  background: grey;
+  border: 1px solid black;
+  color: white;
+  box-sizing: border-box;
+  border-radius: 20px;
+}
+
+.about-me_collection-item:hover .about-me_image {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.hero_image-cover {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100vh; /* Or any height you need */
+  opacity: 1; /* Ensure initial opacity is fully visible */
+}
+
+/* Ensure the initial state does not have blur */
+.menu_background-2 {
+  filter: none;
+  transition: filter 0.3s ease; /* Ensure smooth transition */
+}
+
+/* Default button styles */
+.work_filter-categories_button {
+  /* Add your default button styles here */
+  color: black; /* Default text color */
+  background-color: white; /* Default background color */
+  transition: color 0.5s, background-color 0.5s;
+}
+
+/* Hover effect */
+.work_filter-categories_button:hover {
+  color: white; /* Text color on hover */
+  background-color: black; /* Background color on hover */
+}
+
+/* Active button style */
+.work_filter-categories_button.active-class {
+  color: white; /* Text color when active */
+  background-color: black; /* Background color when active */
+}
+
+.work_selects_item-highlight {
+  transition: 0.5s;
 }

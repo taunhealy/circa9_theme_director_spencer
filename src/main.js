@@ -17,29 +17,27 @@ function raf(time) {
 requestAnimationFrame(raf)
 
 document.addEventListener('DOMContentLoaded', function () {
-  setupScrollUpFunctionality()
   setupModal()
   staggerAnimation()
   setupCategoryFiltering()
+  setupWorkSelectsModal()
 })
-function setupScrollUpFunctionality() {
-  const workScrollUpWrapper = document.querySelector('#scrollUpIcon')
 
-  if (!workScrollUpWrapper) {
-    console.log('No element with the ID "scrollUpIcon" found.')
+//Scroll Back To Top
+document.addEventListener('DOMContentLoaded', () => {
+  const scrollButton = document.querySelector('#scroll-button')
+
+  if (!scrollButton) {
+    console.log('No element with the ID "scroll-button" found.')
     return
   }
 
-  function backToTop() {
+  scrollButton.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+  })
+})
 
-  workScrollUpWrapper.addEventListener('click', backToTop)
-}
-
-// Initialize the function
-setupScrollUpFunctionality()
-
+// Setup Modal
 function setupModal() {
   const modal = document.querySelector('.modal_container')
   if (!modal) {
@@ -53,7 +51,7 @@ function setupModal() {
   const modalVideo = document.querySelector('#modalVideo')
   const modalImage = document.querySelector('.modal_image')
   const spinner = document.querySelector('#spinner')
-  const workItems = document.querySelectorAll('.work_card')
+  const workItems = document.querySelectorAll('.work_selects_item')
 
   if (
     !closeButton ||
@@ -80,10 +78,135 @@ function setupModal() {
   workItems.forEach((item) => {
     item.addEventListener('click', () => {
       document
-        .querySelector('.work_card.is-active')
+        .querySelector('.work_selects_item.is-active')
         ?.classList.remove('is-active')
       item.classList.add('is-active')
       openModal(item)
+    })
+  })
+
+  function openModal(item) {
+    const videoLink = item.dataset.videoLink
+    console.log('Video Link:', videoLink)
+    const imageSrc = item.querySelector('img').src
+    const brand = item.querySelector('.work_brand').textContent
+    const title = item.querySelector('.work_title').textContent
+    const directorName = item.dataset.director
+
+    modal.querySelector('.modal_brand').textContent = brand
+    modal.querySelector('.modal_title').textContent = title
+    modal.querySelector('.modal-director_heading').textContent = directorName
+
+    if (videoLink) {
+      const vimeoId = videoLink.split('/').pop()
+      const embedUrl = `https://player.vimeo.com/video/${vimeoId}`
+      spinner.style.display = 'block'
+      modalVideo.style.display = 'block'
+      modalImage.style.display = 'none'
+
+      const iframe = document.createElement('iframe')
+      iframe.src = embedUrl
+      iframe.width = '100%'
+      iframe.height = '100%'
+      iframe.frameBorder = '0'
+      iframe.allow = 'autoplay; fullscreen'
+      iframe.allowFullscreen = true
+
+      modalVideo.innerHTML = ''
+      modalVideo.appendChild(iframe)
+
+      iframe.onload = () => {
+        gsap.to(spinner, {
+          opacity: 0,
+          duration: 0.3,
+          onComplete: () => {
+            spinner.style.display = 'none'
+          },
+        })
+      }
+
+      iframe.onerror = () => {
+        console.error('Iframe failed to load')
+        gsap.to(spinner, {
+          opacity: 0,
+          duration: 0.3,
+          onComplete: () => {
+            spinner.style.display = 'none'
+          },
+        })
+      }
+
+      iframe.onerror = () => {
+        console.error('Iframe failed to load')
+        spinner.style.display = 'none'
+      }
+    } else {
+      modalVideo.style.display = 'none'
+      modalImage.style.display = 'block'
+      modalImage.src = imageSrc
+    }
+
+    modal.style.display = 'block'
+
+    const tl = gsap.timeline()
+    tl.set(item.querySelector('.work_card-highlight'), {
+      display: 'block',
+      opacity: 0.65,
+    }).to(modal, { opacity: 1, duration: 0.1, ease: 'power3.out' }, '<')
+
+    modal.classList.add('active')
+  }
+
+  function closeModal() {
+    const tl = gsap.timeline({
+      onComplete: () => {
+        modal.style.display = 'none'
+        modal.classList.remove('active')
+        modalVideo.innerHTML = ''
+      },
+    })
+    tl.to(modal, { opacity: 0, duration: 0.21, ease: 'power3.out' })
+  }
+
+  function nextItem() {
+    let currentItem = document.querySelector('.work_selects_item.is-active')
+    let nextItem = currentItem.nextElementSibling
+    if (!nextItem) {
+      nextItem = workItems[0]
+    }
+    currentItem.classList.remove('is-active')
+    nextItem.classList.add('is-active')
+    openModal(nextItem)
+  }
+
+  function prevItem() {
+    let currentItem = document.querySelector('.work_selects_item.is-active')
+    let prevItem = currentItem.previousElementSibling
+    if (!prevItem) {
+      prevItem = workItems[workItems.length - 1]
+    }
+    currentItem.classList.remove('is-active')
+    prevItem.classList.add('is-active')
+    openModal(prevItem)
+  }
+}
+
+function setupWorkSelectsModal() {
+  const workSelectsListWrapper = document.querySelector(
+    '.work_selects_list_wrapper'
+  )
+  const workSelectsItems = document.querySelectorAll(
+    '.work_selects_list .work_selects_item'
+  )
+
+  if (!workSelectsListWrapper) {
+    console.error('Element with class "work_selects_list_wrapper" not found')
+    return
+  }
+
+  workSelectsItems.forEach((item) => {
+    item.addEventListener('click', () => {
+      openModal(item) // Assuming this works for your specific modal setup
     })
   })
 
@@ -93,6 +216,11 @@ function setupModal() {
     const brand = item.querySelector('.work_brand').textContent
     const title = item.querySelector('.work_title').textContent
     const directorName = item.dataset.director
+
+    const modal = document.querySelector('.modal_container')
+    const modalVideo = document.querySelector('#modalVideo')
+    const modalImage = document.querySelector('.modal_image')
+    const spinner = document.querySelector('#spinner')
 
     modal.querySelector('.modal_brand').textContent = brand
     modal.querySelector('.modal_title').textContent = title
@@ -133,45 +261,12 @@ function setupModal() {
     modal.style.display = 'block'
 
     const tl = gsap.timeline()
-    tl.set(item.querySelector('.work_card-purple'), {
+    tl.set(item.querySelector('.work_selects_item-highlight'), {
       display: 'block',
       opacity: 0.65,
     }).to(modal, { opacity: 1, duration: 0.1, ease: 'power3.out' }, '<')
 
     modal.classList.add('active')
-  }
-
-  function closeModal() {
-    const tl = gsap.timeline({
-      onComplete: () => {
-        modal.style.display = 'none'
-        modal.classList.remove('active')
-        modalVideo.innerHTML = ''
-      },
-    })
-    tl.to(modal, { opacity: 0, duration: 0.21, ease: 'power3.out' })
-  }
-
-  function nextItem() {
-    let currentItem = document.querySelector('.work_card.is-active')
-    let nextItem = currentItem.nextElementSibling
-    if (!nextItem) {
-      nextItem = workItems[0]
-    }
-    currentItem.classList.remove('is-active')
-    nextItem.classList.add('is-active')
-    openModal(nextItem)
-  }
-
-  function prevItem() {
-    let currentItem = document.querySelector('.work_card.is-active')
-    let prevItem = currentItem.previousElementSibling
-    if (!prevItem) {
-      prevItem = workItems[workItems.length - 1]
-    }
-    currentItem.classList.remove('is-active')
-    prevItem.classList.add('is-active')
-    openModal(prevItem)
   }
 }
 
@@ -183,129 +278,314 @@ function staggerAnimation() {
 
     gsap.fromTo(
       wrapper, // Target element
-      { opacity: 0, x: -35 }, // From properties
+      { opacity: 0.7, x: -35 }, // From properties
       {
         opacity: 1,
         x: 0,
-        stagger: 0.25,
+        stagger: 0.5,
         duration: 0.55,
         ease: 'power2.out',
         delay: 0.25,
       } // To properties
     )
-
-    const recentWorkWrapper = document.querySelector('.work_wrapper.is-recent')
-    const otherWorkWrappers = document.querySelectorAll(
-      '.work_wrapper:not(.is-recent)'
-    )
-
-    if (recentWorkWrapper) {
-      gsap.from(recentWorkWrapper.children, {
-        opacity: 0,
-        y: 32,
-        stagger: 0.45,
-        duration: 0.45,
-        ease: 'power3.out',
-        delay: 0.25,
-      })
-    }
-
-    if (otherWorkWrappers.length > 0) {
-      gsap.from(otherWorkWrappers, {
-        opacity: 0,
-        y: 32,
-        stagger: 0.45,
-        duration: 0.45,
-        ease: 'power2.out',
-      })
-    }
-  } else {
-    console.error('Element with ID "page-wrapper" not found.')
   }
 }
 
-// Filter and fade in work items
 function setupCategoryFiltering() {
-  const categoryButtons = document.querySelectorAll(
-    '.work-filter_categories_item'
-  )
+  const filterButtons = document.querySelectorAll('[data-button-category]')
+  const items = document.querySelectorAll('.work_selects_item')
 
-  const categoryWrapper = document.querySelector(
-    '.work_filter-categories_wrapper'
-  )
-  const workItems = document.querySelectorAll('.work_card')
-  const recentWorkWrapper = document.querySelector('.work_wrapper.is-recent')
+  filterButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const category = button.dataset.buttonCategory
 
-  function fadeInWorkItems(items) {
-    if (items.length > 0) {
-      gsap.fromTo(
-        items,
-        { opacity: 0, autoAlpha: 0.5 },
-        {
-          opacity: 1,
-          autoAlpha: 1,
-          duration: 0.5,
-          stagger: 0.1,
+      // First, set the display property for all items
+      items.forEach((item) => {
+        if (category === 'all' || item.dataset.workCategory === category) {
+          gsap.set(item, { display: 'block' })
+        } else {
+          gsap.set(item, { display: 'none' })
         }
-      )
-    } else {
-      console.warn('No items to animate.')
-    }
-  }
-
-  function filterAndFadeInWorkItems(categoryName) {
-    const visibleItems = []
-    workItems.forEach((item) => {
-      const category = item.getAttribute('data-work-category').trim()
-      if (category === categoryName || categoryName === 'All') {
-        item.style.display = 'block'
-        visibleItems.push(item)
-      } else {
-        item.style.display = 'none'
-      }
-    })
-
-    // If there are no visible items in the selected category, hide the .is-recent wrapper
-    if (recentWorkWrapper) {
-      const recentItems = recentWorkWrapper.querySelectorAll('.work_card')
-      const hasVisibleRecentItems = Array.from(recentItems).some((item) => {
-        const category = item.getAttribute('data-work-category').trim()
-        return category === categoryName || categoryName === 'All'
       })
 
-      recentWorkWrapper.style.display = hasVisibleRecentItems ? 'block' : 'none'
-    }
-
-    if (visibleItems.length > 0) {
-      gsap.set(visibleItems, { opacity: 0 })
-      fadeInWorkItems(visibleItems)
-    }
-  }
-
-  categoryButtons.forEach((button) => {
-    button.addEventListener('click', (e) => {
-      e.preventDefault()
-
-      const categoryName = button.getAttribute('data-button-category').trim()
-
-      filterAndFadeInWorkItems(categoryName)
-
-      // Scroll to categories wrapper
-      if (categoryWrapper) {
-        categoryWrapper.scrollIntoView({ behavior: 'smooth' })
-      }
-
-      categoryButtons.forEach((btn) => {
-        btn.classList.remove('active-category')
-        Array.from(btn.children).forEach((child) => {
-          child.classList.remove('active-category-child')
-        })
-      })
-
-      button.classList.add('active-category')
-      Array.from(button.children).forEach((child) => {
-        child.classList.add('active-category-child')
+      // Then, apply fade-in and fade-out animations
+      items.forEach((item) => {
+        if (category === 'all' || item.dataset.workCategory === category) {
+          gsap.to(item, {
+            opacity: 1,
+            duration: 1,
+            ease: 'power3.out',
+          })
+        } else {
+          gsap.to(item, {
+            opacity: 0,
+            duration: 1,
+            ease: 'power3.out',
+          })
+        }
       })
     })
   })
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  gsap.to('.scroll-dot', {
+    opacity: 0,
+    y: 40,
+    duration: 1,
+    repeat: -1,
+    ease: 'power1',
+  })
+})
+
+document.addEventListener('DOMContentLoaded', function () {
+  const contactButton = document.getElementById('button-email')
+  const contactMessage = document.getElementById('contact_message')
+  const emailTitle = document.getElementById('email-title')
+  const footer = document.getElementById('contact_wrap')
+  const buttonEmail = document.getElementById('button-email')
+
+  const timeline = gsap.timeline({ paused: true })
+  timeline.to(contactMessage, {
+    opacity: 1,
+    duration: 0.72,
+    ease: 'power3.out',
+    display: 'block',
+  })
+  timeline.to(buttonEmail, {
+    backgroundColor: '',
+    duration: 1,
+    ease: 'power3.out',
+  })
+  timeline.to(footer, {
+    opacity: 1,
+    duration: 1,
+    ease: 'power1.out',
+  })
+  timeline.to(contactMessage, {
+    delay: 0,
+    opacity: 0,
+    duration: 1,
+    ease: 'power1.out',
+    display: 'none',
+  })
+
+  contactButton.addEventListener('click', function () {
+    timeline.restart()
+    // Copy email address to clipboard
+    navigator.clipboard
+      .writeText(emailTitle.innerText)
+      .then(() => {
+        console.log('Email address copied to clipboard')
+        contactButton.textContent = 'Copied' // Change the button text to 'Copied'
+      })
+      .catch((error) => {
+        console.error('Unable to copy email address to clipboard:', error)
+      })
+  })
+})
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Define a common function for scrolling
+  function scrollToSection(targetId) {
+    const targetElement = document.querySelector(targetId)
+    if (targetElement) {
+      targetElement.scrollIntoView({
+        behavior: 'smooth',
+      })
+    } else {
+      console.error(`Element with ID "${targetId}" not found`)
+    }
+  }
+
+  // Attach event listeners to navigation buttons
+  const navButtons = [
+    { id: '#nav_work', target: '#work_wrap' },
+    { id: '#nav_about', target: '#about_wrap' },
+    { id: '#nav_contact', target: '#contact_wrap' },
+    { id: '#footer_about', target: '#about_wrap' },
+    { id: '#footer_work', target: '#work_wrap' },
+    { id: '#footer_contact', target: '#contact_wrap' },
+  ]
+
+  navButtons.forEach((button) => {
+    const element = document.querySelector(button.id)
+    if (element) {
+      element.addEventListener('click', () => scrollToSection(button.target))
+    } else {
+      console.error(`Navigation button with ID "${button.id}" not found`)
+    }
+  })
+})
+
+// About text fade on hover
+document.addEventListener('DOMContentLoaded', function () {
+  const collectionItems = document.querySelectorAll('.about-me_collection-item')
+  const aboutText = document.getElementById('about_text')
+  const socialLink = document.getElementById('about_link')
+
+  const originalText = aboutText ? aboutText.textContent : ''
+
+  if (!aboutText) {
+    console.error('Element with ID "about_text" not found')
+  }
+
+  if (!socialLink) {
+    console.error('Element with ID "about_link" not found')
+  }
+
+  collectionItems.forEach((item) => {
+    const descriptionDiv = item.querySelector('div[data-description]')
+    const description = descriptionDiv
+      ? descriptionDiv.getAttribute('data-description')
+      : null
+    const image = item.querySelector('.about-me_image')
+
+    if (!description) {
+      console.error('No data-description found for:', item)
+    }
+
+    if (!image) {
+      console.error('No image element found for:', item)
+    } else {
+      image.addEventListener('mouseenter', () => {
+        if (aboutText) {
+          aboutText.classList.add('fade-out')
+          setTimeout(() => {
+            aboutText.textContent = description
+            aboutText.classList.add('fade-in')
+          }, 300) // Delay to match fade-out duration
+        }
+      })
+
+      image.addEventListener('click', () => {
+        if (socialLink) {
+          window.open(socialLink.href, socialLink.target)
+        } else {
+          console.error('Social link element is missing')
+        }
+      })
+
+      image.addEventListener('mouseleave', () => {
+        if (aboutText) {
+          aboutText.classList.remove('fade-in')
+          aboutText.classList.add('fade-out')
+          setTimeout(() => {
+            aboutText.textContent = originalText
+            aboutText.classList.remove('fade-out')
+          }, 300) // Delay to match fade-out duration
+        }
+      })
+    }
+  })
+})
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Select all items in the list
+  const items = document.querySelectorAll(
+    '.work_selects_list .work_selects_item'
+  )
+
+  // Hide all items initially
+  items.forEach((item) => {
+    item.style.display = 'none'
+  })
+
+  // Show only the first 5 items
+  for (let i = 0; i < Math.min(7, items.length); i++) {
+    items[i].style.display = 'block'
+  }
+})
+
+//Bakground Hero Cover Image Animation On Hover
+document.addEventListener('DOMContentLoaded', () => {
+  const workSelectsItems = document.querySelectorAll('.work_selects_item')
+  const heroImageCover = document.querySelector('.hero_image-cover')
+
+  if (!heroImageCover) {
+    console.error('Hero image cover element not found')
+    return
+  }
+
+  workSelectsItems.forEach((item) => {
+    item.addEventListener('mouseenter', () => {
+      const workCardImage = item.querySelector('.work_card_image-1')
+
+      if (workCardImage) {
+        const imageUrl = workCardImage.src
+        if (imageUrl) {
+          gsap.to(heroImageCover, {
+            opacity: 0, // Fade out
+            duration: 0.3,
+            onComplete: () => {
+              heroImageCover.style.backgroundImage = `url('${imageUrl}')`
+              gsap.to(heroImageCover, {
+                opacity: 1, // Fade in
+                duration: 0.3,
+              })
+            },
+          })
+        }
+      }
+    })
+
+    item.addEventListener('mouseleave', () => {
+      gsap.to(heroImageCover, {
+        opacity: 0, // Fade out
+        duration: 0.3,
+        onComplete: () => {
+          heroImageCover.style.backgroundImage = '' // Optionally revert to a default image
+          gsap.to(heroImageCover, {
+            opacity: 1, // Fade in
+            duration: 0.3,
+          })
+        },
+      })
+    })
+  })
+
+  // Set initial image on page load
+  if (workSelectsItems.length > 0) {
+    const firstItemImage =
+      workSelectsItems[0].querySelector('.work_card_image-1') // Corrected index to 0
+    if (firstItemImage) {
+      heroImageCover.style.backgroundImage = `url('${firstItemImage.src}')`
+      gsap.set(heroImageCover, { opacity: 0.5 }) // Ensure initial opacity is visible
+    }
+  }
+})
+
+document.addEventListener('DOMContentLoaded', () => {
+  const workItemButtons = document.querySelectorAll(
+    '.work_filter-categories_button'
+  )
+  workItemButtons.forEach((button) => {
+    button.addEventListener('click', function () {
+      workItemButtons.forEach((btn) => btn.classList.remove('active-class'))
+      this.classList.add('active-class')
+    })
+  })
+})
+
+document.addEventListener('DOMContentLoaded', () => {
+  const workSelectsItems = document.querySelectorAll(
+    '.work_selects_item.is-work'
+  )
+
+  workSelectsItems.forEach((item) => {
+    item.addEventListener('mouseover', () => {
+      const highlight = item.querySelector('.work_selects_item-highlight')
+      if (highlight) {
+        console.log(highlight)
+        highlight.style.opacity = '0'
+      }
+    })
+
+    item.addEventListener('mouseout', () => {
+      const highlight = item.querySelector('.work_selects_item-highlight')
+      if (highlight) {
+        highlight.style.opacity = '0.5' // Adjust to your default opacity
+      }
+    })
+  })
+})
