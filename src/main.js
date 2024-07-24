@@ -451,11 +451,22 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       image.addEventListener('mouseenter', () => {
         if (aboutText) {
-          aboutText.classList.add('fade-out')
-          setTimeout(() => {
-            aboutText.textContent = description
-            aboutText.classList.add('fade-in')
-          }, 300) // Delay to match fade-out duration
+          gsap.fromTo(
+            aboutText,
+            { opacity: 1 },
+            {
+              opacity: 0,
+              duration: 0.3,
+              onComplete: () => {
+                aboutText.textContent = description
+                gsap.fromTo(
+                  aboutText,
+                  { opacity: 0 },
+                  { opacity: 1, duration: 0.3 }
+                )
+              },
+            }
+          )
         }
       })
 
@@ -469,12 +480,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
       image.addEventListener('mouseleave', () => {
         if (aboutText) {
-          aboutText.classList.remove('fade-in')
-          aboutText.classList.add('fade-out')
-          setTimeout(() => {
-            aboutText.textContent = originalText
-            aboutText.classList.remove('fade-out')
-          }, 300) // Delay to match fade-out duration
+          gsap.fromTo(
+            aboutText,
+            { opacity: 1 },
+            {
+              opacity: 0,
+              duration: 0.3,
+              onComplete: () => {
+                aboutText.textContent = originalText
+                gsap.fromTo(
+                  aboutText,
+                  { opacity: 0 },
+                  { opacity: 1, duration: 0.3 }
+                )
+              },
+            }
+          )
         }
       })
     }
