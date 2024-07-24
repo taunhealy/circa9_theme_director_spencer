@@ -633,3 +633,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   })
 })
+
+const pageWrapper = document.querySelector('page-wrapper')
+gsap.set(pageWrapper, { opacity: 0 })
