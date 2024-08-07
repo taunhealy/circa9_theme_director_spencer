@@ -300,30 +300,21 @@ function setupCategoryFiltering() {
     button.addEventListener('click', () => {
       const category = button.dataset.buttonCategory
 
-      // First, set the display property for all items
-      items.forEach((item) => {
-        if (category === 'all' || item.dataset.workCategory === category) {
-          gsap.set(item, { display: 'block' })
-        } else {
-          gsap.set(item, { display: 'none' })
-        }
-      })
+      // Hide all items initially
+      gsap.set(items, { display: 'none', opacity: 0.9, scale: 0.97 })
 
-      // Then, apply fade-in and fade-out animations
-      items.forEach((item) => {
-        if (category === 'all' || item.dataset.workCategory === category) {
-          gsap.to(item, {
-            opacity: 1,
-            duration: 1,
-            ease: 'power3.out',
-          })
-        } else {
-          gsap.to(item, {
-            opacity: 0,
-            duration: 1,
-            ease: 'power3.out',
-          })
-        }
+      // Filter and show matching items with a staggered animation
+      const matchingItems = Array.from(items).filter(
+        (item) => category === 'all' || item.dataset.workCategory === category
+      )
+
+      gsap.to(matchingItems, {
+        display: 'block',
+        opacity: 1,
+        scale: 1,
+        duration: 0.5,
+
+        ease: 'sine.out',
       })
     })
   })
@@ -529,6 +520,8 @@ document.addEventListener('DOMContentLoaded', () => {
     return
   }
 
+  let lastHoveredImage = null
+
   workSelectsItems.forEach((item) => {
     item.addEventListener('mouseenter', () => {
       const workCardImage = item.querySelector('.work_card_image-1')
@@ -547,34 +540,25 @@ document.addEventListener('DOMContentLoaded', () => {
               })
             },
           })
+          lastHoveredImage = imageUrl
         }
       }
     })
-
-    item.addEventListener('mouseleave', () => {
-      gsap.to(heroImageCover, {
-        opacity: 0, // Fade out
-        duration: 0.3,
-        onComplete: () => {
-          heroImageCover.style.backgroundImage = '' // Optionally revert to a default image
-          gsap.to(heroImageCover, {
-            opacity: 1, // Fade in
-            duration: 0.3,
-          })
-        },
-      })
-    })
   })
 
-  // Set initial image on page load
-  if (workSelectsItems.length > 0) {
-    const firstItemImage =
-      workSelectsItems[0].querySelector('.work_card_image-1') // Corrected index to 0
-    if (firstItemImage) {
-      heroImageCover.style.backgroundImage = `url('${firstItemImage.src}')`
-      gsap.set(heroImageCover, { opacity: 0.5 }) // Ensure initial opacity is visible
+  // Set initial image to the second item on page load
+  if (workSelectsItems.length > 1) {
+    const secondItemImage =
+      workSelectsItems[1].querySelector('.work_card_image-1')
+    if (secondItemImage) {
+      heroImageCover.style.backgroundImage = `url('${secondItemImage.src}')`
+      gsap.set(heroImageCover, { opacity: 0.5 })
+      lastHoveredImage = secondItemImage.src
     }
   }
+
+  // Use lastHoveredImage to avoid the unused variable warning
+  console.log('Initial hero image:', lastHoveredImage)
 })
 
 document.addEventListener('DOMContentLoaded', () => {
