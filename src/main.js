@@ -520,6 +520,11 @@ document.addEventListener('DOMContentLoaded', () => {
     return
   }
 
+  // Add these lines to set the initial styles
+  heroImageCover.style.backgroundSize = 'cover'
+  heroImageCover.style.backgroundPosition = 'center'
+  heroImageCover.style.height = '100%'
+
   let lastHoveredImage = null
 
   workSelectsItems.forEach((item) => {
